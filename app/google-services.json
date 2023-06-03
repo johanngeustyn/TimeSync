@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "771058598104",
+    "project_id": "timesync-opsc",
+    "storage_bucket": "timesync-opsc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771058598104:android:472373b5658773e701d7ad",
+        "android_client_info": {
+          "package_name": "com.opsc.timesync"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771058598104-6r0m8b8h9uusj1dh4vusud11qdkehnkd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB91cwiQ73k0dRBTuY1-VXqDFDzk4gc21k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "771058598104-6r0m8b8h9uusj1dh4vusud11qdkehnkd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
