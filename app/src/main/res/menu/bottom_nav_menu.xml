@@ -15,9 +15,10 @@
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/title_notifications" />
+
     <item
-        android:id="@+id/navigation_logout"
-        android:icon="@drawable/logout_svgrepo_com"
-        android:title="Log Out" />
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/gear"
+        android:title="Settings" />
 
 </menu>

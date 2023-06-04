@@ -13,4 +13,10 @@
         <item name="android:statusBarColor">#1D1E1D</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <!-- BottomNavigationView theme. -->
+    <style name="Theme.TimeSync.BottomNavigation" parent="Theme.TimeSync">
+        <item name="colorPrimary">@color/DarkGrey</item>
+        <item name="colorOnPrimary">@color/LightGrey</item>
+    </style>
 </resources>
