@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.Observer
 import com.opsc.timesync.R
 import com.opsc.timesync.databinding.FragmentNotificationsBinding
 import com.opsc.timesync.databinding.FragmentSettingsBinding
@@ -31,10 +33,55 @@ class SettingsFragment : Fragment() {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textSettings
-        settingsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        binding.progressBar.visibility = View.VISIBLE
+        binding.contentLayout.visibility = View.GONE
+
+        settingsViewModel.getSettings()
+
+        // Observe changes in settings
+        settingsViewModel.minGoal.observe(viewLifecycleOwner, Observer { minGoal ->
+            // Update UI with minGoal value only if it is not null
+            if(minGoal != null) {
+                binding.minGoalEditText.setText(minGoal.toString())
+            }
+
+            // Check if both fields are ready
+            if(settingsViewModel.maxGoal.value != null && settingsViewModel.minGoal.value != null){
+                binding.progressBar.visibility = View.GONE
+                binding.contentLayout.visibility = View.VISIBLE
+            }
+        })
+
+        settingsViewModel.maxGoal.observe(viewLifecycleOwner, Observer { maxGoal ->
+            // Update UI with maxGoal value only if it is not null
+            if(maxGoal != null) {
+                binding.maxGoalEditText.setText(maxGoal.toString())
+            }
+
+            // Check if both fields are ready
+            if(settingsViewModel.maxGoal.value != null && settingsViewModel.minGoal.value != null){
+                binding.progressBar.visibility = View.GONE
+                binding.contentLayout.visibility = View.VISIBLE
+            }
+        })
+
+        // Setup save button click listener
+        binding.saveButton.setOnClickListener {
+            // Get values from EditTexts
+            val minGoal = binding.minGoalEditText.text.toString().toIntOrNull()
+            val maxGoal = binding.maxGoalEditText.text.toString().toIntOrNull()
+
+            // Validate inputs and Save settings
+            if (minGoal != null && maxGoal != null) {
+                settingsViewModel.saveSettings(minGoal, maxGoal)
+                settingsViewModel.getSettings()
+                Toast.makeText(activity, "Goals have been saved!", Toast.LENGTH_SHORT).show()
+            } else {
+                // Handle invalid input case
+            }
         }
+
+
         return root
     }
 
