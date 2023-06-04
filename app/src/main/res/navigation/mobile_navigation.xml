@@ -18,6 +18,12 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
+        android:id="@+id/navigation_add_new_entry"
+        android:name="com.opsc.timesync.ui.addtimesheetentry.AddTimesheetEntryFragment"
+        android:label="@string/title_new_entry"
+        tools:layout="@layout/fragment_addtimesheetentry" />
+
+    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.opsc.timesync.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
