@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu android:id="@+id/navigation_menu" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/navigation_home"
@@ -15,5 +15,9 @@
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/title_notifications" />
+    <item
+        android:id="@+id/navigation_logout"
+        android:icon="@drawable/logout_svgrepo_com"
+        android:title="Log Out" />
 
 </menu>
