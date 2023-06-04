@@ -49,9 +49,6 @@ class HomeFragment : Fragment() {
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
             recyclerView.adapter = TimesheetAdapter(timesheetList)
         }
-
-
-
         return root
     }
 
