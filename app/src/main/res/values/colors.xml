@@ -10,4 +10,5 @@
     <color name="BackgroundColor">#1D1E1D</color>
     <color name="DecorativeBlue">#6bb7e6</color>
     <color name="LightGrey">#A0A0A0</color>
+    <color name="DarkGrey">#1C1C1C</color>
 </resources>
