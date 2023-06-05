@@ -1,18 +1,21 @@
-package com.opsc.timesync.ui.home
+class Timesheet() {
+    var date: String = ""
+    var startTime: String = ""
+    var endTime: String = ""
+    var entryDescription: String = ""
+    var user: String = ""
 
-class Timesheet {
-
-    val title: String = ""
-    var id: String = ""
-    var startDateTime: String = ""
-    var endDateTime: String = ""
-    var description: String = ""
-
-    constructor()
-    constructor(id: String, startDateTime: String, endDateTime: String, description: String) {
-        this.id = id
-        this.startDateTime = startDateTime
-        this.endDateTime = endDateTime
-        this.description = description
+    constructor(
+        date: String,
+        startTime: String,
+        endTime: String,
+        description: String,
+        user: String
+    ) : this() {
+        this.date = date
+        this.startTime = startTime
+        this.endTime = endTime
+        this.entryDescription = description
+        this.user = user
     }
 }

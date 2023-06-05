@@ -1,37 +1,42 @@
-package com.opsc.timesync.ui.home
-
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.tasks.await
 
 class HomeViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text
-    fun getTimesheets(): LiveData<List<Timesheet>> {
-        // Create a LiveData variable to store the list of timesheets.
-        val timesheets = MutableLiveData<List<Timesheet>>()
+    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val userId: String = auth.currentUser?.uid ?: ""
 
-        FirebaseFirestore.getInstance()
-            .collection("timesheets")
-            .whereEqualTo("user", FirebaseAuth.getInstance().currentUser!!.uid)
+    private val _timesheets = MutableLiveData<List<Timesheet>>()
+    val timesheets: LiveData<List<Timesheet>> get() = _timesheets
+    init {
+        fetchTimesheets()
+    }
+
+    fun fetchTimesheets() {
+        // Fetch timesheets for the current user from Firestore
+        firestore.collection("timesheetEntries")
+            .whereEqualTo("user", userId)
             .get()
-            .addOnSuccessListener { documents ->
-                // Convert the Firestore documents to a list of Timesheet objects.
-                val timesheetList = documents.map { it.toObject(Timesheet::class.java) }
-
-                // Update the LiveData variable with the list of timesheets.
-                timesheets.value = timesheetList
+            .addOnSuccessListener { querySnapshot ->
+                try {
+                    val timesheetList = mutableListOf<Timesheet>()
+                    for (document in querySnapshot) {
+                        val entry = document.toObject(Timesheet::class.java)
+                        timesheetList.add(entry)
+                    }
+                    Log.d("fetchTimesheets:", "Successful")
+                    _timesheets.value = timesheetList
+                } catch (e: Exception) {
+                    Log.e("fetchTimesheets:", "Exception: ${e.message}", e)
+                }
             }
-
-        // Return the LiveData variable.
-        return timesheets
+            .addOnFailureListener { exception ->
+                Log.e("fetchTimesheets:", "Failure: ${exception.message}", exception)
+            }
     }
-
 }
