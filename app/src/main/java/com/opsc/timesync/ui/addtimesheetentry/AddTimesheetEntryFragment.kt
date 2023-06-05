@@ -3,7 +3,6 @@ package com.opsc.timesync.ui.addtimesheetentry
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +11,10 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.datepicker.MaterialDatePicker.Builder.datePicker
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.opsc.timesync.databinding.FragmentAddtimesheetentryBinding
-import java.sql.Time
 import java.sql.Timestamp
 import java.util.*
 
