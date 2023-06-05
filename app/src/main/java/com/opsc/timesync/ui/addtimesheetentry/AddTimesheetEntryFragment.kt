@@ -15,12 +15,12 @@ import android.widget.TimePicker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.opsc.timesync.R
 import com.opsc.timesync.databinding.FragmentAddtimesheetentryBinding
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -171,12 +171,11 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
             }
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
             calendar.set(Calendar.MINUTE, minute)
-            startTime = Timestamp(calendar.timeInMillis)
+            startTime = Timestamp(calendar.timeInMillis / 1000, 0)
 
         } else if (selectedButton == showEndTimePickerButton) {
             selectedButton.text = String.format("%d:%02d", hourOfDay, minute)
 
-            selectedButton.text = String.format("%d:%02d", hourOfDay, minute)
             val calendar = Calendar.getInstance()
             val date = binding.buttonShowDatePicker.text.toString()
 
@@ -188,9 +187,11 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
             }
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
             calendar.set(Calendar.MINUTE, minute)
-            endTime = Timestamp(calendar.timeInMillis)
+            endTime = Timestamp(calendar.timeInMillis / 1000, 0)
         }
     }
+
+
 
     private fun saveEntryToFirestore() {
         val date = binding.buttonShowDatePicker.text.toString()
@@ -223,12 +224,11 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
         // For example:
         val db = FirebaseFirestore.getInstance()
         val entry = hashMapOf(
-            "date" to Timestamp(parsedDate.time),
-            "startTime" to Timestamp(startTimestamp),
-            "endTime" to Timestamp(endTimestamp),
+            "date" to Timestamp(parsedDate.time / 1000, 0),
+            "startTime" to Timestamp(startTimestamp / 1000, 0),
+            "endTime" to Timestamp(endTimestamp / 1000, 0),
             "entryDescription" to entryDescription,
             "user" to user.uid,
-            "category" to selectedCategory.id
         )
         if (selectedCategory.id != "0") {
             entry["category"] = selectedCategory.id
