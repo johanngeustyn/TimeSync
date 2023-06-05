@@ -11,9 +11,12 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.opsc.timesync.R
 import com.opsc.timesync.databinding.FragmentAddtimesheetentryBinding
 import java.sql.Timestamp
 import java.util.*
@@ -174,7 +177,7 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
             .add(entry)
             .addOnSuccessListener {
                 // Entry saved successfully
-                // Handle success case, if needed
+                findNavController().navigate(R.id.navigation_home)
             }
             .addOnFailureListener {
                 // Error occurred while saving entry
