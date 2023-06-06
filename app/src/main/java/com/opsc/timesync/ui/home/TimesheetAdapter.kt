@@ -1,18 +1,23 @@
 package com.opsc.timesync.ui.home
 
 import Category
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.icu.text.SimpleDateFormat
+import android.os.AsyncTask
 import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.ktx.toObject
 import com.opsc.timesync.R
-import com.opsc.timesync.ui.home.Timesheet
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.Locale
 
 class TimesheetAdapter(
@@ -45,6 +50,7 @@ class TimesheetAdapter(
         private val textViewEndTime: TextView = itemView.findViewById(R.id.textViewEndTime)
         private val textViewDate: TextView = itemView.findViewById(R.id.textViewDate)
         private val textViewCategory: TextView = itemView.findViewById(R.id.textViewCategory)
+        private val imageViewPhoto: ImageView = itemView.findViewById(R.id.imageViewPhoto)
 
         fun bind(timesheet: Timesheet) {
             textViewDescription.text = timesheet.entryDescription
@@ -65,6 +71,34 @@ class TimesheetAdapter(
             } else {
                 textViewCategory.visibility = View.GONE
             }
+
+            val imageUrl = timesheet.photoUrl
+            class LoadImageTask(private val imageView: ImageView) : AsyncTask<String, Void, Bitmap?>() {
+                override fun doInBackground(vararg params: String): Bitmap? {
+                    try {
+                        val imageUrl = params[0]
+                        val url = URL(imageUrl)
+                        val connection = url.openConnection() as HttpURLConnection
+                        connection.doInput = true
+                        connection.connect()
+                        val inputStream = connection.inputStream
+                        return BitmapFactory.decodeStream(inputStream)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                    return null
+                }
+
+                override fun onPostExecute(result: Bitmap?) {
+                    if (result != null) {
+                        imageView.setImageBitmap(result)
+                    }
+                }
+            }
+
+// Create an instance of LoadImageTask and execute it
+            val loadImageTask = LoadImageTask(imageViewPhoto)
+            loadImageTask.execute(imageUrl)
         }
 
         private fun formatTimestamp(timestamp: Timestamp?): String {

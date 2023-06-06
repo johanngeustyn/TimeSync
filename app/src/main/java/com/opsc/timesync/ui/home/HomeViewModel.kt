@@ -13,9 +13,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import com.opsc.timesync.ui.home.Timesheet
 
 class HomeViewModel : ViewModel() {
 
@@ -65,9 +63,10 @@ class HomeViewModel : ViewModel() {
                                 entry.categoryName = categoryName  // Set the category name directly in Timesheet
                                 Log.d("fetchTimesheet:","${categoryName}")
                                 timesheetList.add(entry)
+                                entry.photoUrl = document.getString("photoUrl")
 
                                 if (timesheetList.size == querySnapshot.size()) {
-                                    // Check if all fetch tasks are completed
+
                                     if (fetchCategoryTasks.all { it.isComplete }) {
                                         _timesheets.value = timesheetList
                                         _categoryMap.value = categoryMap
@@ -76,7 +75,7 @@ class HomeViewModel : ViewModel() {
                             }
                         } else {
                             timesheetList.add(entry)
-
+                            entry.photoUrl = document.getString("photoUrl")
                             if (timesheetList.size == querySnapshot.size()) {
                                 _timesheets.value = timesheetList
                                 _categoryMap.value = categoryMap

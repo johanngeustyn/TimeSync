@@ -34,6 +34,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/imageViewPhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+
+                android:src="@android:drawable/ic_menu_report_image" />
             <TextView
                 android:id="@+id/textViewDescription"
                 android:layout_width="wrap_content"

@@ -1,9 +1,18 @@
 package com.opsc.timesync.ui.addtimesheetentry
 
 import Category
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,19 +20,32 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.DatePicker
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TimePicker
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import com.opsc.timesync.R
 import com.opsc.timesync.databinding.FragmentAddtimesheetentryBinding
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
+
 
 class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
@@ -45,8 +67,12 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
     private lateinit var endTime: Timestamp
 
     private lateinit var categorySpinner: Spinner
-    private lateinit var selectedCategory: Category // Updated variable type
+    private lateinit var selectedCategory: Category
 
+    private val REQUEST_IMAGE_PICK = 1
+    private var selectedImageUri: Uri? = null
+
+    private lateinit var imageViewSelectedPhoto: ImageView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -100,8 +126,24 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
 
         val addEntryButton = binding.addEntry
         addEntryButton.setOnClickListener {
-            saveEntryToFirestore()
+            val photoUri = selectedImageUri
+            if (photoUri != null) {
+                // Launch a coroutine to upload the photo and save the entry
+                lifecycleScope.launch {
+                    val photoUrl = uploadPhotoAndReturnUrl(photoUri)
+                    if (photoUrl != null) {
+                        Log.d("comeon","brh")
+                        saveEntryToFirestore(photoUrl)
+                    } else {
+                        // Handle the case when the photo upload failed
+                    }
+                }
+            } else {
+                // Handle the case when no photo is selected
+            }
         }
+
+
 
         categorySpinner = binding.dropdownCategories
 
@@ -133,8 +175,17 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
                 }
             }
 
+
+        imageViewSelectedPhoto = binding.addedImageView
+        val selectPhotoButton = binding.addImageButton
+        selectPhotoButton.setOnClickListener {
+            requestExternalStoragePermission()
+        }
+
         return root
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -194,7 +245,7 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
 
 
 
-    private fun saveEntryToFirestore() {
+    private fun saveEntryToFirestore(photoUrl: String?) {
         val date = binding.buttonShowDatePicker.text.toString()
         val startTime = binding.buttonShowStartTimePicker.text.toString()
         val endTime = binding.buttonShowEndTimePicker.text.toString()
@@ -221,8 +272,6 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
         endDateCalendar.set(Calendar.MINUTE, parsedEndTime.minutes)
         val endTimestamp = endDateCalendar.timeInMillis
 
-        // Add your Firestore logic here to save the entry to the "timesheetentries" collection
-        // For example:
         val db = FirebaseFirestore.getInstance()
 
         val categoryRef = if (selectedCategory.id != "0") {
@@ -237,18 +286,88 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
             "endTime" to Timestamp(endTimestamp / 1000, 0),
             "entryDescription" to entryDescription,
             "user" to user.uid,
-            "category" to categoryRef
+            "category" to categoryRef,
+            "photoUrl" to photoUrl
         )
 
         db.collection("timesheetEntries")
             .add(entry)
             .addOnSuccessListener {
-                // Entry saved successfully
                 findNavController().navigate(R.id.navigation_home)
             }
             .addOnFailureListener {
-                // Error occurred while saving entry
-                // Handle failure case, if needed
             }
     }
+
+    private fun openGallery() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                "android.permission.READ_EXTERNAL_STORAGE"
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf("android.permission.READ_EXTERNAL_STORAGE"),
+                REQUEST_IMAGE_PICK
+            )
+        } else {
+            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(galleryIntent, REQUEST_IMAGE_PICK)
+        }
+    }
+
+    private val REQUEST_CODE_PICK_FILE = 1
+
+    private fun requestExternalStoragePermission() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.type = "*/*"
+        startActivityForResult(intent, REQUEST_CODE_PICK_FILE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK) {
+            val uri: Uri? = data?.data
+            if (uri != null) {
+                // Update the imageViewSelectedPhoto with the selected image
+                imageViewSelectedPhoto.setImageURI(uri)
+                selectedImageUri = uri
+            }
+        }
+    }
+
+
+
+    private suspend fun uploadPhotoAndReturnUrl(imageUri: Uri): String? {
+        val storageRef = FirebaseStorage.getInstance().reference
+        val photoRef = storageRef.child("photos/${UUID.randomUUID()}")
+        val uploadTask = photoRef.putFile(imageUri)
+        Log.d("working","bruh")
+        return try {
+            val taskSnapshot = uploadTask.uploadTaskAwait() // Renamed the function here
+            val downloadUrl = photoRef.downloadUrl.await()
+            downloadUrl.toString()
+        } catch (exception: Exception) {
+            null
+        }
+    }
+
+    // Renamed function
+    private suspend fun Task<UploadTask.TaskSnapshot>.uploadTaskAwait(): UploadTask.TaskSnapshot {
+        return suspendCancellableCoroutine { continuation ->
+            addOnSuccessListener { snapshot ->
+                if (continuation.isActive) {
+                    continuation.resume(snapshot)
+                }
+            }.addOnFailureListener { exception ->
+                if (continuation.isActive) {
+                    continuation.resumeWithException(exception)
+                }
+            }.addOnCanceledListener {
+                continuation.cancel()
+            }
+        }
+    }
 }
+
+

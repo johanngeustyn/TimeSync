@@ -10,5 +10,6 @@ class Timesheet(
     var category: DocumentReference? = null,
     var categoryName: String? = null,
     var entryDescription: String? = null,
-    var user: String? = null
+    var user: String? = null,
+    var photoUrl: String? = null
 )
