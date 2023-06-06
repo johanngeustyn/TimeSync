@@ -17,9 +17,9 @@
         android:title="@string/title_new_entry" />
 
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:id="@+id/navigation_report"
+        android:icon="@drawable/ic_report_24dp"
+        android:title="Report" />
 
     <item
         android:id="@+id/navigation_settings"

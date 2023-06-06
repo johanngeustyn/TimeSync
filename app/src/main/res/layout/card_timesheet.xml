@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp"
+            android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/linearLayout"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,12 +36,14 @@
 
             <ImageView
                 android:id="@+id/imageViewPhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_gravity="left"
+                android:layout_marginBottom="8dp"
+                android:maxHeight="50dp"
+                android:scaleType="centerCrop"
                 android:src="@android:drawable/ic_menu_report_image" />
+
             <TextView
                 android:id="@+id/textViewDescription"
                 android:layout_width="wrap_content"
@@ -80,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp"
+            android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -88,6 +90,7 @@
                 android:id="@+id/textViewStartTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:layout_marginBottom="8dp"
                 android:text="Category"
                 android:textColor="@android:color/white"
@@ -97,6 +100,7 @@
                 android:id="@+id/textViewEndTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:layout_marginBottom="4dp"
                 android:text="Category"
                 android:textColor="@android:color/white"
