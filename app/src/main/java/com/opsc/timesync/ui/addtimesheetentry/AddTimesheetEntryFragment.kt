@@ -126,20 +126,20 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
 
         val addEntryButton = binding.addEntry
         addEntryButton.setOnClickListener {
-            val photoUri = selectedImageUri
-            if (photoUri != null) {
-                // Launch a coroutine to upload the photo and save the entry
-                lifecycleScope.launch {
+            // Launch a coroutine to save the entry
+            lifecycleScope.launch {
+                val photoUri = selectedImageUri
+                if (photoUri != null) {
                     val photoUrl = uploadPhotoAndReturnUrl(photoUri)
                     if (photoUrl != null) {
-                        Log.d("comeon","brh")
                         saveEntryToFirestore(photoUrl)
                     } else {
                         // Handle the case when the photo upload failed
                     }
+                } else {
+                    // No photo selected, save the entry without a photo URL
+                    saveEntryToFirestore(null)
                 }
-            } else {
-                // Handle the case when no photo is selected
             }
         }
 

@@ -95,10 +95,13 @@ class TimesheetAdapter(
                     }
                 }
             }
-
-// Create an instance of LoadImageTask and execute it
             val loadImageTask = LoadImageTask(imageViewPhoto)
-            loadImageTask.execute(imageUrl)
+            if(imageUrl != null){
+                loadImageTask.execute(imageUrl)
+            } else
+            {
+                imageViewPhoto.visibility = View.GONE
+            }
         }
 
         private fun formatTimestamp(timestamp: Timestamp?): String {
