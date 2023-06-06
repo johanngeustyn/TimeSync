@@ -1,6 +1,5 @@
 package com.opsc.timesync.ui.home
 
-import HomeViewModel
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,6 +19,7 @@ class HomeFragment : Fragment() {
     private lateinit var user: FirebaseUser
     private lateinit var recyclerView: RecyclerView
     private lateinit var timesheetAdapter: TimesheetAdapter
+    private lateinit var homeViewModel: HomeViewModel
 
     private val binding get() = _binding!!
 
@@ -28,8 +28,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this)[HomeViewModel::class.java]
+        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         user = FirebaseAuth.getInstance().currentUser!!
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -38,13 +37,11 @@ class HomeFragment : Fragment() {
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        timesheetAdapter = TimesheetAdapter(emptyList())
+        timesheetAdapter = TimesheetAdapter(emptyList(), emptyMap())
         recyclerView.adapter = timesheetAdapter
 
-        homeViewModel.fetchTimesheets()
-
         homeViewModel.timesheets.observe(viewLifecycleOwner) { timesheetList ->
-            timesheetAdapter.updateData(timesheetList)
+            timesheetAdapter.updateData(timesheetList, homeViewModel.categoryMap.value.orEmpty())
         }
 
         return root

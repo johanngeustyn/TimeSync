@@ -1,5 +1,6 @@
 package com.opsc.timesync.ui.addtimesheetentry
 
+import Category
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
@@ -128,7 +129,7 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    selectedCategory = Category("None", "None")
+                    selectedCategory = Category("0", "None")
                 }
             }
 
@@ -223,16 +224,22 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
         // Add your Firestore logic here to save the entry to the "timesheetentries" collection
         // For example:
         val db = FirebaseFirestore.getInstance()
+
+        val categoryRef = if (selectedCategory.id != "0") {
+            db.collection("categories").document(selectedCategory.id)
+        } else {
+            null
+        }
+
         val entry = hashMapOf(
             "date" to Timestamp(parsedDate.time / 1000, 0),
             "startTime" to Timestamp(startTimestamp / 1000, 0),
             "endTime" to Timestamp(endTimestamp / 1000, 0),
             "entryDescription" to entryDescription,
             "user" to user.uid,
+            "category" to categoryRef
         )
-        if (selectedCategory.id != "0") {
-            entry["category"] = selectedCategory.id
-        }
+
         db.collection("timesheetEntries")
             .add(entry)
             .addOnSuccessListener {
