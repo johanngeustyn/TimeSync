@@ -1,155 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/BackgroundColor"
-    tools:context=".ui.addtimesheetentry.AddTimesheetEntryFragment">
+    android:fillViewport="true">
 
-    <Button
-        android:id="@+id/button_show_date_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:text="Select Date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectDateTextView"
-        tools:ignore="MissingConstraints" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/BackgroundColor"
+        android:paddingLeft="30dp"
+        android:paddingTop="40dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="100dp"
+        tools:context=".ui.addtimesheetentry.AddTimesheetEntryFragment">
 
-    <Button
-        android:id="@+id/button_show_start_time_picker"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:text="Select Start Time"
-        app:layout_constraintEnd_toStartOf="@+id/button_show_end_time_picker"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectStartTimeTextView"
-        tools:ignore="MissingConstraints" />
+        <Button
+            android:id="@+id/button_show_date_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bordered_button"
+            android:fontFamily="@font/inter"
+            android:text="Select Date"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/selectDateTextView"
+            tools:ignore="MissingConstraints" />
 
-    <Button
-        android:id="@+id/button_show_end_time_picker"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        android:text="Select End Time"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_show_start_time_picker"
-        app:layout_constraintTop_toBottomOf="@+id/selectStartTimeTextView"
-        tools:ignore="MissingConstraints" />
+        <Button
+            android:id="@+id/button_show_start_time_picker"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bordered_button"
+            android:fontFamily="@font/inter"
+            android:text="Start Time"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/selectStartTimeTextView"
+            tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/selectDateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:text="Select Date"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/button_show_end_time_picker"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bordered_button"
+            android:fontFamily="@font/inter"
+            android:text="End Time"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@id/button_show_start_time_picker"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/selectStartTimeTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:text="Select Start and End Time"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_show_date_picker" />
+        <TextView
+            android:id="@+id/selectDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:text="Select Date"
+            android:textColor="@color/LightGrey"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/Description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        android:text="Description"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_show_end_time_picker" />
+        <TextView
+            android:id="@+id/selectStartTimeTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:fontFamily="@font/inter"
+            android:text="Select Start and End Time"
+            android:textColor="@color/LightGrey"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_show_date_picker" />
 
-    <EditText
-        android:id="@+id/descriptionEditText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:ems="10"
-        android:hint="description"
-        android:inputType="text"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Description" />
+        <TextView
+            android:id="@+id/Description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:fontFamily="@font/inter"
+            android:text="Description"
+            android:textColor="@color/LightGrey"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_show_start_time_picker" />
 
-    <Button
-        android:id="@+id/addEntry"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:text="Add Entry"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addedImageView" />
+        <EditText
+            android:id="@+id/descriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/DecorativeBlue"
+            android:ems="10"
+            android:fontFamily="@font/inter"
+            android:hint="Description"
+            android:inputType="text"
+            android:paddingBottom="16dp"
+            android:textColor="@color/LightGrey"
+            android:textColorHighlight="@color/DecorativeBlue"
+            android:textColorHint="@color/LightGrey"
+            android:textColorLink="@color/DecorativeBlue"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/Description"
+            tools:layout_editor_absoluteX="52dp" />
 
-    <Spinner
-        android:id="@+id/dropdownCategories"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectCategoryTextView" />
+        <Button
+            android:id="@+id/addEntry"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/bordered_button"
+            android:fontFamily="@font/inter"
+            android:text="Add Entry"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/addedImageView"
+            tools:layout_editor_absoluteX="52dp" />
 
-    <TextView
-        android:id="@+id/selectCategoryTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:textColor="@color/white"
-        android:text="Select Category"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Spinner
+            android:id="@+id/dropdownCategories"
+            style="@android:style/Widget.Spinner.DropDown"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bordered_button"
+            android:backgroundTint="@color/DecorativeBlue"
+            android:fontFamily="@font/inter"
+            android:foregroundTint="@color/LightGrey"
+            android:paddingStart="15dp"
+            android:textColor="@color/LightGrey"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/selectCategoryTextView" />
 
-    <Button
-        android:id="@+id/addImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-        android:text="Add Image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionEditText" />
+        <TextView
+            android:id="@+id/selectCategoryTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:text="Select Category"
+            android:textColor="@color/LightGrey"
+            android:textSize="16sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/addedImageView"
-        android:layout_width="98dp"
-        android:layout_height="94dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:src="@android:drawable/ic_menu_report_image"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionEditText" />
+        <Button
+            android:id="@+id/addImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/bordered_button"
+            android:fontFamily="@font/inter"
+            android:text="Add Image"
+            android:textStyle="bold"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/addedImageView" />
 
+        <ImageView
+            android:id="@+id/addedImageView"
+            android:layout_width="150dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="50dp"
+            android:src="@android:drawable/ic_menu_report_image"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/descriptionEditText" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
