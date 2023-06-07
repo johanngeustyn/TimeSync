@@ -46,7 +46,7 @@ class SettingsFragment : Fragment() {
             }
 
             // Check if both fields are ready
-            if(settingsViewModel.maxGoal.value != null && settingsViewModel.minGoal.value != null){
+            if(settingsViewModel.maxGoal.value != null || settingsViewModel.minGoal.value != null || (settingsViewModel.maxGoal.value == null && settingsViewModel.minGoal.value == null)){
                 binding.progressBar.visibility = View.GONE
                 binding.contentLayout.visibility = View.VISIBLE
             }
@@ -59,7 +59,7 @@ class SettingsFragment : Fragment() {
             }
 
             // Check if both fields are ready
-            if(settingsViewModel.maxGoal.value != null && settingsViewModel.minGoal.value != null){
+            if(settingsViewModel.maxGoal.value != null || settingsViewModel.minGoal.value != null || (settingsViewModel.maxGoal.value == null && settingsViewModel.minGoal.value == null)){
                 binding.progressBar.visibility = View.GONE
                 binding.contentLayout.visibility = View.VISIBLE
             }
