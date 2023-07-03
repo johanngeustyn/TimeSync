@@ -57,7 +57,7 @@
         android:background="@drawable/bordered_edittext"
         android:ems="10"
         android:fontFamily="@font/inter"
-        android:hint="occupation/student/"
+        android:hint="occupation"
         android:inputType="text"
         android:paddingStart="25dp"
         android:singleLine="true"
