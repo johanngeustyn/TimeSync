@@ -8,19 +8,27 @@ account creation, time entry logging, category management, filtered reports, and
 ## Table of Contents
 
 1. [Features](#features)
-2. [Getting Started](#getting-started)
-3. [Contribute](#contribute)
-4. [License](#license)
+2. [Recent Updates](#recent-updates)
+3. [Getting Started](#getting-started)
+4. [Contribute](#contribute)
+5. [License](#license)
 
 ## Features
 
-- Sign Up / Sign In.
-- Home Screen displaying all the time entries.
+- Sign Up / Sign In with additional fields for Name and Occupation.
+- Home Screen displaying all time entries and a chart that visualizes progress towards daily goals.
 - Categories Screen for categorizing time entries and adding new categories.
 - Add Time Entry with details: date, category, start time, end time, description, image.
-- Reports Screen for filtered reports based on date range.
+- Reports Screen for filtered reports based on date range and a detailed chart showcasing user activity against set goals.
 - Settings Screen for setting min and max daily hour goals.
 - Log out functionality.
+
+## Recent Updates
+
+- Added a chart on the Home Screen that helps visualize progress towards daily goals.
+- Included a detailed chart on the Reports Screen showcasing user activity against set goals.
+- Enhanced the Sign Up process by adding fields for Name and Occupation.
+- Fixed several bugs to improve user experience.
 
 ## Getting Started
 
