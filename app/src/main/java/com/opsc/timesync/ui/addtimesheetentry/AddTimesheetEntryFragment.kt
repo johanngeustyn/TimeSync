@@ -10,9 +10,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,13 +35,16 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.opsc.timesync.R
 import com.opsc.timesync.databinding.FragmentAddtimesheetentryBinding
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.UUID
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 
 class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener,
@@ -186,7 +186,6 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
     }
 
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -242,7 +241,6 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
             endTime = Timestamp(calendar.timeInMillis / 1000, 0)
         }
     }
-
 
 
     private fun saveEntryToFirestore(photoUrl: String?) {
@@ -311,7 +309,8 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
                 REQUEST_IMAGE_PICK
             )
         } else {
-            val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            val galleryIntent =
+                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(galleryIntent, REQUEST_IMAGE_PICK)
         }
     }
@@ -337,12 +336,11 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
     }
 
 
-
     private suspend fun uploadPhotoAndReturnUrl(imageUri: Uri): String? {
         val storageRef = FirebaseStorage.getInstance().reference
         val photoRef = storageRef.child("photos/${UUID.randomUUID()}")
         val uploadTask = photoRef.putFile(imageUri)
-        Log.d("working","bruh")
+        Log.d("working", "bruh")
         return try {
             val taskSnapshot = uploadTask.uploadTaskAwait() // Renamed the function here
             val downloadUrl = photoRef.downloadUrl.await()

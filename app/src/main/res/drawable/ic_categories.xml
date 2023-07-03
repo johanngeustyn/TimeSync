@@ -1,4 +1,10 @@
-<vector android:height="24dp" android:viewportHeight="16"
-    android:viewportWidth="16" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="#000000" android:fillType="evenOdd" android:pathData="M5,11.5a0.5,0.5 0,0 1,0.5 -0.5h9a0.5,0.5 0,0 1,0 1h-9a0.5,0.5 0,0 1,-0.5 -0.5zM5,7.5a0.5,0.5 0,0 1,0.5 -0.5h9a0.5,0.5 0,0 1,0 1h-9a0.5,0.5 0,0 1,-0.5 -0.5zM5,3.5a0.5,0.5 0,0 1,0.5 -0.5h9a0.5,0.5 0,0 1,0 1h-9a0.5,0.5 0,0 1,-0.5 -0.5zM2,4.5a1,1 0,1 0,0 -2,1 1,0 0,0 0,2zM2,8.5a1,1 0,1 0,0 -2,1 1,0 0,0 0,2zM2,12.5a1,1 0,1 0,0 -2,1 1,0 0,0 0,2z"/>
+<vector android:height="24dp"
+    android:viewportHeight="16"
+    android:viewportWidth="16"
+    android:width="24dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <path
+        android:fillColor="#000000"
+        android:fillType="evenOdd"
+        android:pathData="M5,11.5a0.5,0.5 0,0 1,0.5 -0.5h9a0.5,0.5 0,0 1,0 1h-9a0.5,0.5 0,0 1,-0.5 -0.5zM5,7.5a0.5,0.5 0,0 1,0.5 -0.5h9a0.5,0.5 0,0 1,0 1h-9a0.5,0.5 0,0 1,-0.5 -0.5zM5,3.5a0.5,0.5 0,0 1,0.5 -0.5h9a0.5,0.5 0,0 1,0 1h-9a0.5,0.5 0,0 1,-0.5 -0.5zM2,4.5a1,1 0,1 0,0 -2,1 1,0 0,0 0,2zM2,8.5a1,1 0,1 0,0 -2,1 1,0 0,0 0,2zM2,12.5a1,1 0,1 0,0 -2,1 1,0 0,0 0,2z" />
 </vector>

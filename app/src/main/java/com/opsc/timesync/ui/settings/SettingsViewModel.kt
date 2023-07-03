@@ -40,7 +40,6 @@ class SettingsViewModel : ViewModel() {
     }
 
 
-
     fun saveSettings(minGoal: Int, maxGoal: Int) {
         val userId = auth.currentUser?.uid
         if (userId != null) {

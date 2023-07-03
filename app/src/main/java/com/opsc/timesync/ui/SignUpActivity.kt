@@ -10,9 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.opsc.timesync.MainActivity
 import com.opsc.timesync.R
@@ -53,7 +51,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun signUp(email: String, password: String){
+    private fun signUp(email: String, password: String) {
         Log.d(LoginActivity.TAG, "signIn:$email")
         if (!validateForm()) {
             return

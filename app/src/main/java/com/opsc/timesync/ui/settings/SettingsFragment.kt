@@ -1,18 +1,14 @@
 package com.opsc.timesync.ui.settings
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.opsc.timesync.R
-import com.opsc.timesync.databinding.FragmentNotificationsBinding
+import androidx.lifecycle.ViewModelProvider
 import com.opsc.timesync.databinding.FragmentSettingsBinding
-import com.opsc.timesync.ui.notifications.NotificationsViewModel
 
 class SettingsFragment : Fragment() {
 
@@ -41,12 +37,12 @@ class SettingsFragment : Fragment() {
         // Observe changes in settings
         settingsViewModel.minGoal.observe(viewLifecycleOwner, Observer { minGoal ->
             // Update UI with minGoal value only if it is not null
-            if(minGoal != null) {
+            if (minGoal != null) {
                 binding.minGoalEditText.setText(minGoal.toString())
             }
 
             // Check if both fields are ready
-            if(settingsViewModel.maxGoal.value != null || settingsViewModel.minGoal.value != null || (settingsViewModel.maxGoal.value == null && settingsViewModel.minGoal.value == null)){
+            if (settingsViewModel.maxGoal.value != null || settingsViewModel.minGoal.value != null || (settingsViewModel.maxGoal.value == null && settingsViewModel.minGoal.value == null)) {
                 binding.progressBar.visibility = View.GONE
                 binding.contentLayout.visibility = View.VISIBLE
             }
@@ -54,12 +50,12 @@ class SettingsFragment : Fragment() {
 
         settingsViewModel.maxGoal.observe(viewLifecycleOwner, Observer { maxGoal ->
             // Update UI with maxGoal value only if it is not null
-            if(maxGoal != null) {
+            if (maxGoal != null) {
                 binding.maxGoalEditText.setText(maxGoal.toString())
             }
 
             // Check if both fields are ready
-            if(settingsViewModel.maxGoal.value != null || settingsViewModel.minGoal.value != null || (settingsViewModel.maxGoal.value == null && settingsViewModel.minGoal.value == null)){
+            if (settingsViewModel.maxGoal.value != null || settingsViewModel.minGoal.value != null || (settingsViewModel.maxGoal.value == null && settingsViewModel.minGoal.value == null)) {
                 binding.progressBar.visibility = View.GONE
                 binding.contentLayout.visibility = View.VISIBLE
             }

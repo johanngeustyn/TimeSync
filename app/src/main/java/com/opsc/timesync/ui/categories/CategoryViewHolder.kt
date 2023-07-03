@@ -5,6 +5,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.opsc.timesync.R
 
-class CategoryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val nameTextView: TextView = itemView.findViewById(R.id.name)
 }

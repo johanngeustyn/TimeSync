@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu android:id="@+id/navigation_menu" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu android:id="@+id/navigation_menu"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/gear"
         android:title="Settings"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_logout"
         android:icon="@drawable/logout_svgrepo_com"
         android:title="Log Out"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
 </menu>

@@ -2,22 +2,21 @@ package com.opsc.timesync.ui.report
 
 import android.app.DatePickerDialog
 import android.os.Build
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.opsc.timesync.databinding.FragmentReportBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 class ReportFragment : Fragment() {
@@ -68,7 +67,8 @@ class ReportFragment : Fragment() {
                     val calendar = Calendar.getInstance()
                     calendar.set(year, month, dayOfMonth)
                     selectedStartDate = Timestamp(calendar.time)
-                    startDateButton.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(calendar.time)
+                    startDateButton.text =
+                        SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(calendar.time)
                 },
                 Calendar.getInstance().get(Calendar.YEAR),
                 Calendar.getInstance().get(Calendar.MONTH),
@@ -86,7 +86,8 @@ class ReportFragment : Fragment() {
                     val calendar = Calendar.getInstance()
                     calendar.set(year, month, dayOfMonth)
                     selectedEndDate = Timestamp(calendar.time)
-                    endDateButton.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(calendar.time)
+                    endDateButton.text =
+                        SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(calendar.time)
                 },
                 Calendar.getInstance().get(Calendar.YEAR),
                 Calendar.getInstance().get(Calendar.MONTH),
@@ -102,10 +103,18 @@ class ReportFragment : Fragment() {
                 if (!selectedStartDate!!.toDate().after(selectedEndDate!!.toDate())) {
                     reportViewModel.getReport(selectedStartDate!!, selectedEndDate!!)
                 } else {
-                    Toast.makeText(requireContext(), "End date cannot be before start date.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "End date cannot be before start date.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } else {
-                Toast.makeText(requireContext(), "Please select both start and end dates.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Please select both start and end dates.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 

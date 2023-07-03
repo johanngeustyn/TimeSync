@@ -5,14 +5,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.icu.text.SimpleDateFormat
 import android.os.AsyncTask
-import android.util.Log
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import com.opsc.timesync.R
@@ -73,7 +70,9 @@ class TimesheetAdapter(
             }
 
             val imageUrl = timesheet.photoUrl
-            class LoadImageTask(private val imageView: ImageView) : AsyncTask<String, Void, Bitmap?>() {
+
+            class LoadImageTask(private val imageView: ImageView) :
+                AsyncTask<String, Void, Bitmap?>() {
                 override fun doInBackground(vararg params: String): Bitmap? {
                     try {
                         val imageUrl = params[0]
@@ -95,11 +94,11 @@ class TimesheetAdapter(
                     }
                 }
             }
+
             val loadImageTask = LoadImageTask(imageViewPhoto)
-            if(imageUrl != null){
+            if (imageUrl != null) {
                 loadImageTask.execute(imageUrl)
-            } else
-            {
+            } else {
                 imageViewPhoto.visibility = View.GONE
             }
         }

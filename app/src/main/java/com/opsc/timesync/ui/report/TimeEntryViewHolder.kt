@@ -1,20 +1,15 @@
 package com.opsc.timesync.ui.report
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.icu.text.SimpleDateFormat
-import android.os.AsyncTask
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import com.opsc.timesync.R
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.Locale
 
-class TimeEntryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class TimeEntryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val textViewDescription: TextView = itemView.findViewById(R.id.textViewDescription)
     private val textViewStartTime: TextView = itemView.findViewById(R.id.textViewStartTime)
     private val textViewEndTime: TextView = itemView.findViewById(R.id.textViewEndTime)

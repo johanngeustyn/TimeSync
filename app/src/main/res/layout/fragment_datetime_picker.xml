@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <DatePicker
         android:id="@+id/date_picker"
         android:layout_width="0dp"
@@ -10,6 +11,7 @@
         android:background="#FFFFFF"
         android:calendarTextColor="#FFFFFF"
         tools:ignore="MissingConstraints" />
+
     <Button
         android:id="@+id/ok_button"
         android:layout_width="wrap_content"

@@ -1,12 +1,9 @@
 package com.opsc.timesync.ui.report
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.opsc.timesync.R
 
 class CategoryTotalAdapter : ListAdapter<CategoryTotal, CategoryTotalViewHolder>(DIFF_CALLBACK) {
@@ -17,7 +14,10 @@ class CategoryTotalAdapter : ListAdapter<CategoryTotal, CategoryTotalViewHolder>
                 return oldItem.totalHours == newItem.totalHours
             }
 
-            override fun areContentsTheSame(oldItem: CategoryTotal, newItem: CategoryTotal): Boolean {
+            override fun areContentsTheSame(
+                oldItem: CategoryTotal,
+                newItem: CategoryTotal
+            ): Boolean {
                 return oldItem == newItem
             }
         }

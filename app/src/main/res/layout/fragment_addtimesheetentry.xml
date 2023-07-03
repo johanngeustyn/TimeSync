@@ -169,4 +169,4 @@
             app:layout_constraintTop_toBottomOf="@id/descriptionEditText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+</ScrollView>

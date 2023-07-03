@@ -1,20 +1,15 @@
 package com.opsc.timesync.ui.report
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.opsc.timesync.ui.settings.SettingsViewModel
-import java.time.Duration
 
 class TimeEntry(
     var documentId: String? = null,
@@ -75,7 +70,14 @@ class ReportViewModel : ViewModel() {
                             Log.d(TAG, "Success getting category: $category")
 
                             if (date != null && startTime != null && endTime != null) {
-                                val timeEntry = TimeEntry(documentId, date, startTime, endTime, category, entryDescription)
+                                val timeEntry = TimeEntry(
+                                    documentId,
+                                    date,
+                                    startTime,
+                                    endTime,
+                                    category,
+                                    entryDescription
+                                )
                                 entries.add(timeEntry)
                             }
                         }
@@ -109,7 +111,8 @@ class ReportViewModel : ViewModel() {
             val end = endTimeHour + endTimeMinute / 60.0
 
             val durationHours = end - start  // replaced previous calculation
-            val categoryTotal = categoryMap.getOrPut(entry.categoryName!!) { CategoryTotal(entry.categoryName!!) }
+            val categoryTotal =
+                categoryMap.getOrPut(entry.categoryName!!) { CategoryTotal(entry.categoryName!!) }
             categoryTotal.totalHours += durationHours
         }
 

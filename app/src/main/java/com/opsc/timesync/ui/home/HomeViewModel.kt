@@ -60,8 +60,9 @@ class HomeViewModel : ViewModel() {
 
                                 categoryMap[categoryId] = category
                                 entry.category = categoryRef  // Pass the category reference
-                                entry.categoryName = categoryName  // Set the category name directly in Timesheet
-                                Log.d("fetchTimesheet:","${categoryName}")
+                                entry.categoryName =
+                                    categoryName  // Set the category name directly in Timesheet
+                                Log.d("fetchTimesheet:", "${categoryName}")
                                 timesheetList.add(entry)
                                 entry.photoUrl = document.getString("photoUrl")
 
@@ -97,7 +98,7 @@ class HomeViewModel : ViewModel() {
         categoryRef.get()
             .addOnSuccessListener { categorySnapshot ->
                 completionSource.setResult(categorySnapshot)
-                Log.d("fetchCategory categoryName:","${categorySnapshot.get("name")}")
+                Log.d("fetchCategory categoryName:", "${categorySnapshot.get("name")}")
 
             }
             .addOnFailureListener { exception ->

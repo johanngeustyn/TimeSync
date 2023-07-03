@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.opsc.timesync.R
 
-class CategoryAdapter: RecyclerView.Adapter<CategoryViewHolder>() {
+class CategoryAdapter : RecyclerView.Adapter<CategoryViewHolder>() {
     private val categoryList = mutableListOf<String>()
 
     fun submitList(categories: List<String>) {
