@@ -1,3 +1,5 @@
+Github Repository Link: [https://github.com/edizyurdakul/OPSC7311_POE_PART_3](https://github.com/edizyurdakul/OPSC7311_POE_PART_3)
+
 # TimeSync
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
