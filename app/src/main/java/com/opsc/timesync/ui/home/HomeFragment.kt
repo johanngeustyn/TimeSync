@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -55,11 +56,13 @@ class HomeFragment : Fragment() {
 
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
-        homeViewModel.timesheets.observe(viewLifecycleOwner) { timesheetList ->
-            timesheetAdapter.updateData(timesheetList, homeViewModel.categoryMap.value.orEmpty())
-            if (timesheetList.isNotEmpty()) {
-                val totalHoursByDay = calculateTotalHoursByDay(timesheetList)
-                setupLineChart(totalHoursByDay)
+        homeViewModel.userSettings.observe(viewLifecycleOwner) { userSettings ->
+            homeViewModel.timesheets.observe(viewLifecycleOwner) { timesheetList ->
+                timesheetAdapter.updateData(timesheetList, homeViewModel.categoryMap.value.orEmpty())
+                if (timesheetList.isNotEmpty()) {
+                    val totalHoursByDay = calculateTotalHoursByDay(timesheetList)
+                    setupLineChart(totalHoursByDay, userSettings)
+                }
             }
         }
         return root
@@ -105,31 +108,59 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun setupLineChart(totalHoursByDay: Map<Date, Float>) {
+    private fun setupLineChart(
+        totalHoursByDay: Map<Date, Float>,
+        userSettings: HomeViewModel.UserSettings
+    ) {
         val entries = totalHoursByDay.entries.sortedBy { it.key }
         val xAxisLabels = entries.map { entry ->
             SimpleDateFormat("dd MMM", Locale.getDefault()).format(entry.key)
         }
+        val minGoal = userSettings.minGoal
+        val maxGoal = userSettings.maxGoal
 
         val xAxis = lineChart.xAxis
         xAxis.valueFormatter = IndexAxisValueFormatter(xAxisLabels)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.textColor = Color.WHITE
-
+        xAxis.textSize = 16f
         val yAxis = lineChart.axisLeft
         yAxis.textColor = Color.WHITE
-
+        yAxis.textSize = 16f
         val dataSet = LineDataSet(entries.mapIndexed { index, entry ->
             Entry(index.toFloat(), entry.value)
         }, "Total Hours")
         dataSet.color = Color.WHITE
         dataSet.valueTextColor = Color.WHITE
-
+        dataSet.valueTextSize = 14F
         val lineData = LineData(dataSet)
+
+        // Add goal lines
+        val goalLines = mutableListOf<LimitLine>()
+        val minGoalLine = LimitLine(minGoal.toFloat(), "Min Goal")
+        minGoalLine.lineWidth = 2f
+        minGoalLine.lineColor = Color.RED
+        minGoalLine.textColor = Color.WHITE
+        minGoalLine.textSize = 16F
+        goalLines.add(minGoalLine)
+
+        val maxGoalLine = LimitLine(maxGoal.toFloat(), "Max Goal")
+        maxGoalLine.lineWidth = 2f
+        maxGoalLine.lineColor = Color.GREEN
+        maxGoalLine.textColor = Color.WHITE
+        maxGoalLine.textSize = 16F
+        goalLines.add(maxGoalLine)
+
+        // Apply goal lines to the chart
+        yAxis.removeAllLimitLines()
+        for (goalLine in goalLines) {
+            yAxis.addLimitLine(goalLine)
+        }
 
         lineChart.data = lineData
         lineChart.invalidate()
     }
+
 
 
     private inner class DayAxisValueFormatter(private val sdf: SimpleDateFormat) :

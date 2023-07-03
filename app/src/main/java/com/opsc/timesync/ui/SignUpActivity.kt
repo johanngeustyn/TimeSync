@@ -11,27 +11,44 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.opsc.timesync.MainActivity
 import com.opsc.timesync.R
 
-
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+
+    private lateinit var nameEditText: EditText
+    private lateinit var occupationEditText: EditText
+    private lateinit var emailEditText: EditText
+    private lateinit var passwordEditText: EditText
+    private lateinit var signUpButton: Button
+    private lateinit var signInText: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
         auth = Firebase.auth
+        db = FirebaseFirestore.getInstance()
 
-        val email = findViewById<EditText>(R.id.email)
-        val password = findViewById<EditText>(R.id.password)
-        val signUpButton = findViewById<Button>(R.id.signUpButton)
-        val signInText = findViewById<TextView>(R.id.signInText)
+        nameEditText = findViewById(R.id.name)
+        occupationEditText = findViewById(R.id.occupation)
+        emailEditText = findViewById(R.id.email)
+        passwordEditText = findViewById(R.id.password)
+        signUpButton = findViewById(R.id.signUpButton)
+        signInText = findViewById(R.id.signInText)
 
         signUpButton.setOnClickListener {
-            signUp(email.text.toString(), password.text.toString())
+            signUp(
+                nameEditText.text.toString(),
+                occupationEditText.text.toString(),
+                emailEditText.text.toString(),
+                passwordEditText.text.toString()
+            )
         }
 
         signInText.setOnClickListener {
@@ -42,7 +59,6 @@ class SignUpActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if (currentUser != null) {
             val intent = Intent(this, MainActivity::class.java)
@@ -51,8 +67,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun signUp(email: String, password: String) {
-        Log.d(LoginActivity.TAG, "signIn:$email")
+    private fun signUp(name: String, occupation: String, email: String, password: String) {
         if (!validateForm()) {
             return
         }
@@ -60,40 +75,66 @@ class SignUpActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "createUserWithEmail:success")
+                    val currentUser = auth.currentUser
+                    if (currentUser != null) {
+                        val user = hashMapOf(
+                            "userId" to currentUser.uid,
+                            "name" to name,
+                            "occupation" to occupation,
+                            "email" to email
+                        )
+
+                        db.collection("userProfile")
+                            .document(currentUser.uid)
+                            .set(user)
+                            .addOnSuccessListener {
+                                Log.d(TAG, "User profile created for ${currentUser.uid}")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e(TAG, "Error creating user profile", e)
+                            }
+                    }
+
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 } else {
-                    // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     Toast.makeText(
                         baseContext,
                         "Authentication failed.",
-                        Toast.LENGTH_SHORT,
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }
     }
 
+
     private fun validateForm(): Boolean {
         var valid = true
 
-        val email = findViewById<EditText>(R.id.email)
-        if (TextUtils.isEmpty(email.toString())) {
-            email.error = "Required."
+        val name = nameEditText.text.toString()
+        if (TextUtils.isEmpty(name)) {
+            nameEditText.error = "Required."
             valid = false
         } else {
-            email.error = null
+            nameEditText.error = null
         }
 
-        val password = findViewById<EditText>(R.id.password)
-        if (TextUtils.isEmpty(password.toString())) {
-            password.error = "Required."
+        val email = emailEditText.text.toString()
+        if (TextUtils.isEmpty(email)) {
+            emailEditText.error = "Required."
             valid = false
         } else {
-            password.error = null
+            emailEditText.error = null
+        }
+
+        val password = passwordEditText.text.toString()
+        if (TextUtils.isEmpty(password)) {
+            passwordEditText.error = "Required."
+            valid = false
+        } else {
+            passwordEditText.error = null
         }
 
         return valid

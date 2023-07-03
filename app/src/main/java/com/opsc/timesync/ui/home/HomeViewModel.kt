@@ -26,9 +26,12 @@ class HomeViewModel : ViewModel() {
 
     private val _categoryMap = MutableLiveData<Map<String, Category>>()
     val categoryMap: LiveData<Map<String, Category>> get() = _categoryMap
+    private val _userSettings = MutableLiveData<UserSettings>()
+    val userSettings: LiveData<UserSettings> get() = _userSettings
 
     init {
         fetchTimesheets()
+        fetchUserSettings()
     }
 
     fun fetchTimesheets() {
@@ -107,4 +110,22 @@ class HomeViewModel : ViewModel() {
 
         return completionSource.task
     }
+    private fun fetchUserSettings() {
+        firestore.collection("userSettings")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                val maxGoal = documentSnapshot.getLong("max_goal")?.toInt() ?: 0
+                val minGoal = documentSnapshot.getLong("min_goal")?.toInt() ?: 0
+                val userSettings = UserSettings(maxGoal, minGoal)
+                _userSettings.value = userSettings
+            }
+            .addOnFailureListener { exception ->
+                Log.e("fetchUserSettings:", "Failure: ${exception.message}", exception)
+            }
+    }
+    data class UserSettings(
+        val maxGoal: Int,
+        val minGoal: Int
+    )
 }

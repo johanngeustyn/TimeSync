@@ -19,11 +19,55 @@
         android:text="Create Your Account"
         android:textColor="@color/white"
         android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/email"
+        app:layout_constraintBottom_toTopOf="@+id/name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <EditText
+        android:id="@+id/name"
+        style="@style/Widget.AppCompat.EditText"
+        android:layout_width="325dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginEnd="43dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/bordered_edittext"
+        android:ems="10"
+        android:fontFamily="@font/inter"
+        android:hint="name"
+        android:inputType="textPersonName"
+        android:paddingStart="25dp"
+        android:singleLine="true"
+        android:textColor="@color/LightGrey"
+        android:textColorHint="@color/LightGrey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/occupation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
+    <EditText
+        android:id="@+id/occupation"
+        style="@style/Widget.AppCompat.EditText"
+        android:layout_width="325dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginEnd="43dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/bordered_edittext"
+        android:ems="10"
+        android:fontFamily="@font/inter"
+        android:hint="occupation/student/"
+        android:inputType="text"
+        android:paddingStart="25dp"
+        android:singleLine="true"
+        android:textColor="@color/LightGrey"
+        android:textColorHint="@color/LightGrey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
     <EditText
         android:id="@+id/email"
         style="@style/Widget.AppCompat.EditText"
@@ -45,7 +89,7 @@
         app:layout_constraintBottom_toTopOf="@+id/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/occupation" />
 
     <EditText
         android:id="@+id/password"
