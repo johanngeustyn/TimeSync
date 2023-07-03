@@ -14,6 +14,7 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.LimitLine
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -23,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.opsc.timesync.R
 import com.opsc.timesync.databinding.FragmentHomeBinding
+import com.opsc.timesync.ui.report.ReportViewModel
 import java.lang.Math.abs
 import java.util.Calendar
 import java.util.Date
@@ -114,26 +116,47 @@ class HomeFragment : Fragment() {
     ) {
         val entries = totalHoursByDay.entries.sortedBy { it.key }
         val xAxisLabels = entries.map { entry ->
-            SimpleDateFormat("dd MMM", Locale.getDefault()).format(entry.key)
+            android.icu.text.SimpleDateFormat("dd MMM", Locale.getDefault()).format(entry.key)
         }
         val minGoal = userSettings.minGoal
         val maxGoal = userSettings.maxGoal
 
-        val xAxis = lineChart.xAxis
+        val xAxis = binding.lineChart.xAxis
+        xAxis.granularity = 1f  // Set granularity to 1 so it will increment by 1
+        xAxis.isGranularityEnabled = true
         xAxis.valueFormatter = IndexAxisValueFormatter(xAxisLabels)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.textColor = Color.WHITE
         xAxis.textSize = 16f
-        val yAxis = lineChart.axisLeft
-        yAxis.textColor = Color.WHITE
-        yAxis.textSize = 16f
+
+        val yAxisLeft = binding.lineChart.axisLeft
+        yAxisLeft.granularity = 1f  // Set granularity to 1 so it will increment by 1
+        yAxisLeft.isGranularityEnabled = true
+        yAxisLeft.textColor = Color.WHITE
+        yAxisLeft.textSize = 16f
         val dataSet = LineDataSet(entries.mapIndexed { index, entry ->
             Entry(index.toFloat(), entry.value)
         }, "Total Hours")
         dataSet.color = Color.WHITE
         dataSet.valueTextColor = Color.WHITE
         dataSet.valueTextSize = 14F
+
+        val yAxisRight = binding.lineChart.axisRight
+        yAxisRight.granularity = 1f  // Set granularity to 1 so it will increment by 1
+        yAxisRight.isGranularityEnabled = true
+        yAxisRight.textColor = Color.WHITE
+        yAxisRight.textSize = 16f
+        dataSet.color = Color.WHITE
+        dataSet.valueTextColor = Color.WHITE
+        dataSet.valueTextSize = 14F
+
         val lineData = LineData(dataSet)
+
+        val leftAxis: YAxis = binding.lineChart.axisLeft
+        leftAxis.axisMinimum = 0f  // Set y-axis minimum to 0
+
+        val rightAxis: YAxis = binding.lineChart.axisRight
+        rightAxis.axisMinimum = 0f  // Set y-axis minimum to 0
 
         // Add goal lines
         val goalLines = mutableListOf<LimitLine>()
@@ -152,16 +175,14 @@ class HomeFragment : Fragment() {
         goalLines.add(maxGoalLine)
 
         // Apply goal lines to the chart
-        yAxis.removeAllLimitLines()
+        yAxisLeft.removeAllLimitLines()
         for (goalLine in goalLines) {
-            yAxis.addLimitLine(goalLine)
+            yAxisLeft.addLimitLine(goalLine)
         }
 
-        lineChart.data = lineData
-        lineChart.invalidate()
+        binding.lineChart.data = lineData
+        binding.lineChart.invalidate()
     }
-
-
 
     private inner class DayAxisValueFormatter(private val sdf: SimpleDateFormat) :
         ValueFormatter() {

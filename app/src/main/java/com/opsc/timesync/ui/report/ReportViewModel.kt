@@ -1,15 +1,28 @@
 package com.opsc.timesync.ui.report
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.github.mikephil.charting.data.Entry
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.opsc.timesync.ui.home.HomeViewModel
+import com.opsc.timesync.ui.home.Timesheet
+import com.opsc.timesync.ui.settings.SettingsViewModel
+import java.text.SimpleDateFormat
+import java.time.Duration
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class TimeEntry(
     var documentId: String? = null,
@@ -38,11 +51,15 @@ class ReportViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
 
+    private val userId: String = auth.currentUser?.uid ?: ""
+
     val timeEntries = MutableLiveData<List<TimeEntry>>()
     val categoryTotals = MutableLiveData<List<CategoryTotal>>()
 
+    private val _userSettings = MutableLiveData<UserSettings>()
+    val userSettings: LiveData<UserSettings> get() = _userSettings
+
     fun getReport(startDate: Timestamp, endDate: Timestamp) {
-        val userId = auth.currentUser?.uid
         if (userId != null) {
             db.collection("timesheetEntries")
                 .whereEqualTo("user", userId)
@@ -70,14 +87,7 @@ class ReportViewModel : ViewModel() {
                             Log.d(TAG, "Success getting category: $category")
 
                             if (date != null && startTime != null && endTime != null) {
-                                val timeEntry = TimeEntry(
-                                    documentId,
-                                    date,
-                                    startTime,
-                                    endTime,
-                                    category,
-                                    entryDescription
-                                )
+                                val timeEntry = TimeEntry(documentId, date, startTime, endTime, category, entryDescription)
                                 entries.add(timeEntry)
                             }
                         }
@@ -97,7 +107,6 @@ class ReportViewModel : ViewModel() {
         }
     }
 
-
     private fun calculateCategoryTotals(entries: List<TimeEntry>) {
         val categoryMap = mutableMapOf<String, CategoryTotal>()
 
@@ -111,16 +120,72 @@ class ReportViewModel : ViewModel() {
             val end = endTimeHour + endTimeMinute / 60.0
 
             val durationHours = end - start  // replaced previous calculation
-            val categoryTotal =
-                categoryMap.getOrPut(entry.categoryName!!) { CategoryTotal(entry.categoryName!!) }
+            val categoryTotal = categoryMap.getOrPut(entry.categoryName!!) { CategoryTotal(entry.categoryName!!) }
             categoryTotal.totalHours += durationHours
         }
 
         categoryTotals.postValue(categoryMap.values.toList())
     }
 
+    fun calculateTotalHoursByDay(entries: List<TimeEntry>): Map<Date, Float> {
+        val totalHoursByDay = HashMap<Date, Float>()
+
+        val sdf = android.icu.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val calendar = Calendar.getInstance()
+
+        for (timesheet in entries) {
+            val date = timesheet.date?.toDate()
+            val startTime = timesheet.startTime?.toDate()
+            val endTime = timesheet.endTime?.toDate()
+
+            if (date != null && startTime != null && endTime != null) {
+                calendar.time = startTime
+                calendar.set(Calendar.HOUR_OF_DAY, 0)
+                calendar.set(Calendar.MINUTE, 0)
+                calendar.set(Calendar.SECOND, 0)
+                calendar.set(Calendar.MILLISECOND, 0)
+                val day = calendar.time
+
+                val totalHours = (endTime.time - startTime.time) / (1000 * 60 * 60).toFloat()
+
+                if (totalHoursByDay.containsKey(day)) {
+                    val currentTotalHours = totalHoursByDay[day] ?: 0f
+                    totalHoursByDay[day] = currentTotalHours + totalHours
+                } else {
+                    totalHoursByDay[day] = totalHours
+                }
+            }
+        }
+
+        // Make all total hours positive
+        for (key in totalHoursByDay.keys) {
+            val totalHours = totalHoursByDay[key] ?: 0f
+            totalHoursByDay[key] = Math.abs(totalHours)
+        }
+
+        return totalHoursByDay
+    }
+
+    fun fetchUserSettings() {
+        db.collection("userSettings")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                val maxGoal = documentSnapshot.getLong("max_goal")?.toInt() ?: 0
+                val minGoal = documentSnapshot.getLong("min_goal")?.toInt() ?: 0
+                val userSettings = UserSettings(maxGoal, minGoal)
+                _userSettings.value = userSettings
+            }
+            .addOnFailureListener { exception ->
+                Log.e("fetchUserSettings:", "Failure: ${exception.message}", exception)
+            }
+    }
+    data class UserSettings(
+        val maxGoal: Int,
+        val minGoal: Int
+    )
+
     companion object {
         const val TAG = "Report"
     }
 }
-

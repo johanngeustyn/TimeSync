@@ -87,16 +87,21 @@ class AddTimesheetEntryFragment : Fragment(), DatePickerDialog.OnDateSetListener
 
         showDatePickerButton = binding.buttonShowDatePicker
         showDatePickerButton.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 this,
-                Calendar.YEAR,
-                Calendar.MONTH,
-                Calendar.DAY_OF_MONTH
+                year,
+                month,
+                day
             )
-            datePickerDialog.datePicker.minDate = System.currentTimeMillis()
             datePickerDialog.show()
         }
+
 
         showStartTimePickerButton = binding.buttonShowStartTimePicker
         showStartTimePickerButton.setOnClickListener {
